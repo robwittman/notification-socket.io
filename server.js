@@ -141,19 +141,27 @@ app.post('/api/:userId/push', function(req, res) {
  * Ping endpoint.
  */
 app.get('/api/status/ping', function(req, res) {
-	res.send('pong')
+	if (req.header('X-AUTH-TOKEN') != process.env['AUTH_TOKEN']) {
+		res.status(401).send();
+	} else {
+		res.send('pong')
+	}
 });
 
 /**
  * Info endpoint.
  */
 app.get('/api/status/info', function(req, res) {
-	res.setHeader('Content-Type', 'application/json');
-	var info = {
-		'name': pjson.name,
-		'version': pjson.version
-	};
-	res.send(info)
+	if (req.header('X-AUTH-TOKEN') != process.env['AUTH_TOKEN']) {
+		res.status(401).send();
+	} else {
+		res.setHeader('Content-Type', 'application/json');
+		var info = {
+			'name': pjson.name,
+			'version': pjson.version
+		};
+		res.send(info)
+	}
 });
 
 http.listen(app.get('port'), function() {
