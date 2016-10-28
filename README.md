@@ -17,15 +17,15 @@ Notification-socket.io is a ready to use push notification server supporting mul
 We prefer the Docker solution so the following command must be run:
 
 ```
-docker run -d -p 3000:3000 \ 
-  --name notification-socket.io \ 
-  -e "AUTH_TOKEN=PUT_AUTH_TOKEN_HERE" \ 
+docker run -d -p 3000:3000 \
+  --name notification-socket.io \
+  -e "AUTH_TOKEN=PUT_AUTH_TOKEN_HERE" \
   netbulls/notification-socket.io:1.0.0
 ```
 
 
 > IMPORTANT:
-> CHANGE_PUT_AUTH_TOKEN_HERE - has to be changed into a secure token which will be used as an 
+> CHANGE_PUT_AUTH_TOKEN_HERE - has to be changed into a secure token which will be used as an
 > authentication token to notification-socket.io API from you backend application.
 
 
@@ -59,7 +59,7 @@ We recommend that it is used in the following way but of course it can be modifi
 ![Diagram of register process](https://raw.githubusercontent.com/netbulls/notification-socket.io/master/doc/images/register.png)
 
 > IMPORTANT:
-> each request from your backend to notification-socket.io has to be authenticated by a 
+> each request from your backend to notification-socket.io has to be authenticated by a
 > HEADER X-AUTH-TOKEN with the same value as the env variable AUTH_TOKEN of notification-socket.io
 
 
@@ -70,9 +70,9 @@ We recommend that it is used in the following way but of course it can be modifi
    ```PUT /api/{userId}/register?connectionId={connectionId} with X-AUTH-TOKEN header```
 
    > IMPORTANT
-   > where userId is the unique id of your user in your application we will use the 
+   > where userId is the unique id of your user in your application we will use the
    > userId in the future to send one push notification to all clients of this user
-   
+
 
 4. Your backend app returns `connectionId` and `url` to notification-socket.io to client app
 5. Client app connects and authenticates to notification-socket.io (using socket.io lib):
@@ -86,7 +86,7 @@ We recommend that it is used in the following way but of course it can be modifi
 6. Register client apps which are to receive push notifications. Use socket.io to listen to messages with an identifier `message`:
 
    ```javascript
-   socket.on('message', function(msg) {
+   socket.on('custom-event', function(msg) {
         //handle your message
    });
    ```
@@ -94,24 +94,22 @@ We recommend that it is used in the following way but of course it can be modifi
 ### Send a push notification
 
 ![Diagram of sending push notification](https://raw.githubusercontent.com/netbulls/notification-socket.io/master/doc/images/send.png)
-   
-1. When your backend application wants to send a push notification to a client just execute: 
 
-  ```POST /api/{userId}/push with X-AUTH-TOKEN header``` 
-  
-  and send the content of the push notification message, format of message {"message": message_json}, e.g.
+1. When your backend application wants to send a push notification to a client just execute:
+
+  ```POST /api/{userId}/push with X-AUTH-TOKEN and NOTIF_EVENT headers```
+
+  and send the content of the push notification message, format of message {"payload": payload}, e.g.
 
    ```
    {
-     "message": {
-       "title":"Title of message",
-       "body": "Body of message",
-       "params": {}
+     "payload": {
+      ...
      }
    }
    ```
 2. Client app will receive a push notification in callback registered in step 6
-   
+
 ### Disconnect   
 
 1. To stop receiving push notifications your client app has to execute:

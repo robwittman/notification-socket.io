@@ -66,14 +66,14 @@ var pushService = (function() {
 		 * @param userId id of user.
 		 * @param message message.
 		 */
-		pushMessage: function(userId, message) {
+		pushMessage: function(userId, event, payload) {
 			var userConnections = connections[userId];
 			if (userConnections) {
 				for (var connectionId in  userConnections) {
 					if (userConnections.hasOwnProperty(connectionId)) {
 						var socket = userConnections[connectionId];
 						if (socket != null) {
-							socket.emit('message', message);
+							socket.emit(event, payload);
 						}
 					}
 				}
@@ -128,7 +128,7 @@ app.post('/api/:userId/push', function(req, res) {
 	} else {
 		var userId = req.params['userId'];
 		if (userId && req.body.message) {
-			pushService.pushMessage(userId, req.body.message);
+			pushService.pushMessage(userId, req.header('X-NOTIF-EVENT', req.body.payload);
 			res.send();
 		}
 		else {
