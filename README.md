@@ -20,14 +20,12 @@ We prefer the Docker solution so the following command must be run:
 docker run -d -p 3000:3000 \
   --name notification-socket.io \
   -e "AUTH_TOKEN=PUT_AUTH_TOKEN_HERE" \
-  netbulls/notification-socket.io:1.0.0
+  robbybugatti/notification-server
 ```
-
 
 > IMPORTANT:
 > CHANGE_PUT_AUTH_TOKEN_HERE - has to be changed into a secure token which will be used as an
 > authentication token to notification-socket.io API from you backend application.
-
 
 ### Manual installation
 * install Node.js and npm

@@ -127,8 +127,8 @@ app.post('/api/:userId/push', function(req, res) {
 		res.status(401).send();
 	} else {
 		var userId = req.params['userId'];
-		if (userId && req.body.message) {
-			pushService.pushMessage(userId, req.header('X-NOTIF-EVENT', req.body.payload);
+		if (userId && req.body.payload) {
+			pushService.pushMessage(userId, req.header('X-NOTIF-EVENT'), req.body.payload);
 			res.send();
 		}
 		else {

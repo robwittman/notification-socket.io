@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Notification Example</title>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.js"></script>
+        <script src="http://localhost:3000/socket.io/socket.io.js"></script>
+    </head>
+    <body>
+
+        <script type='text/javascript'>
+            var myUid = 1;
+            // We need to register our connection
+            $.ajax({
+                method: 'POST',
+                url   : '/connect.php',
+                data  : {
+                    uid : myUid
+                },
+                dataType: 'json',
+                success: function(response) {
+                    console.log(response);
+                    if(response.success) {
+                        console.log("Successfully connected to socket server");
+                        console.log({
+                            'uid' : myUid,
+                            'connecitonId' : response.connectionId
+                        });
+                        var socket = io.connect('http://localhost:3000');
+                        socket.on('connect', function() {
+                            socket.emit('register', myUid, response.connectionId);
+                        });
+
+                        // You can change this to whichever event you want to use
+                        socket.on('custom.event', function(msg) {
+                            console.log(msg);
+                        });
+                    }
+                    else
+                    {
+                        alert(response.error);
+                    }
+                }
+            })
+        </script>
+    </body>
+</html>
